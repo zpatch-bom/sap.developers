@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData">
+    <edmx:Reference Uri="http://sesapaptt01.cpall.co.th:8000/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMON',Version='0001',SAP__Origin='LOCAL')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.Common.v1" Alias="Common"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="http://sesapaptt01.cpall.co.th:8000/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CAPABILITIES',Version='0001',SAP__Origin='LOCAL')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="Org.OData.Capabilities.V1" Alias="Capabilities"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="http://sesapaptt01.cpall.co.th:8000/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMUNICATION',Version='0001',SAP__Origin='LOCAL')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.Communication.v1" Alias="Communication"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="http://sesapaptt01.cpall.co.th:8000/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_AGGREGATION',Version='0001',SAP__Origin='LOCAL')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="Org.OData.Aggregation.V1" Alias="Aggregation"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="http://sesapaptt01.cpall.co.th:8000/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_PERSONALDATA',Version='0001',SAP__Origin='LOCAL')/$value" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+        <edmx:Include Namespace="com.sap.vocabularies.PersonalData.v1" Alias="PersonalData"/>
+    </edmx:Reference>
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema Namespace="YC_PC_FE_CUSTOMER_LIST_CDS" xml:lang="en" sap:schema-version="1" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+            <EntityType Name="I_CustomerGroupType" sap:label="Customer Group" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="CustomerGroup"/>
+                </Key>
+                <Property Name="CustomerGroup" Type="Edm.String" Nullable="false" MaxLength="2" sap:display-format="UpperCase" sap:text="CustomerGroup_Text" sap:label="Customer Group"/>
+                <Property Name="CustomerGroup_Text" Type="Edm.String" MaxLength="20" sap:label="Name" sap:creatable="false" sap:updatable="false"/>
+            </EntityType>
+            <EntityType Name="CustomerListType" sap:label="PC-Demo: Customer List Report" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="kunnr"/>
+                </Key>
+                <Property Name="kunnr" Type="Edm.String" Nullable="false" MaxLength="10" sap:display-format="UpperCase" sap:text="CustomerName" sap:label="Customer" sap:quickinfo="Customer Number"/>
+                <Property Name="CustomerName" Type="Edm.String" MaxLength="220" sap:display-format="UpperCase" sap:label="Customer Name" sap:quickinfo="Customer Full Name"/>
+                <Property Name="land1" Type="Edm.String" MaxLength="3" sap:display-format="UpperCase" sap:label="Country" sap:quickinfo="Country Key"/>
+                <Property Name="ktokd" Type="Edm.String" MaxLength="4" sap:display-format="UpperCase" sap:text="to_CustomerGroup/CustomerGroup_Text" sap:label="Account group" sap:quickinfo="Customer Account Group" sap:value-list="standard"/>
+                <Property Name="stcd3" Type="Edm.String" MaxLength="18" sap:display-format="UpperCase" sap:label="Tax Number 3"/>
+                <NavigationProperty Name="to_CustomerGroup" Relationship="YC_PC_FE_CUSTOMER_LIST_CDS.assoc_D7787983845C721842877E5D23769A10" FromRole="FromRole_assoc_D7787983845C721842877E5D23769A10" ToRole="ToRole_assoc_D7787983845C721842877E5D23769A10"/>
+            </EntityType>
+            <Association Name="assoc_D7787983845C721842877E5D23769A10" sap:content-version="1">
+                <End Type="YC_PC_FE_CUSTOMER_LIST_CDS.CustomerListType" Multiplicity="1" Role="FromRole_assoc_D7787983845C721842877E5D23769A10"/>
+                <End Type="YC_PC_FE_CUSTOMER_LIST_CDS.I_CustomerGroupType" Multiplicity="1" Role="ToRole_assoc_D7787983845C721842877E5D23769A10"/>
+                <ReferentialConstraint>
+                    <Principal Role="ToRole_assoc_D7787983845C721842877E5D23769A10">
+                        <PropertyRef Name="CustomerGroup"/>
+                    </Principal>
+                    <Dependent Role="FromRole_assoc_D7787983845C721842877E5D23769A10">
+                        <PropertyRef Name="ktokd"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <EntityContainer Name="YC_PC_FE_CUSTOMER_LIST_CDS_Entities" m:IsDefaultEntityContainer="true" sap:message-scope-supported="true" sap:supported-formats="atom json xlsx">
+                <EntitySet Name="I_CustomerGroup" EntityType="YC_PC_FE_CUSTOMER_LIST_CDS.I_CustomerGroupType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1"/>
+                <EntitySet Name="CustomerListSets" EntityType="YC_PC_FE_CUSTOMER_LIST_CDS.CustomerListType" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:searchable="true" sap:content-version="1"/>
+                <AssociationSet Name="assoc_D7787983845C721842877E5D23769A10" Association="YC_PC_FE_CUSTOMER_LIST_CDS.assoc_D7787983845C721842877E5D23769A10" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="CustomerListSets" Role="FromRole_assoc_D7787983845C721842877E5D23769A10"/>
+                    <End EntitySet="I_CustomerGroup" Role="ToRole_assoc_D7787983845C721842877E5D23769A10"/>
+                </AssociationSet>
+            </EntityContainer>
+            <Annotations Target="YC_PC_FE_CUSTOMER_LIST_CDS.CustomerListType/ktokd" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.ValueList">
+                    <Record>
+                        <PropertyValue Property="Label" String="Customer Group"/>
+                        <PropertyValue Property="CollectionPath" String="I_CustomerGroup"/>
+                        <PropertyValue Property="SearchSupported" Bool="false"/>
+                        <PropertyValue Property="Parameters">
+                            <Collection>
+                                <Record Type="Common.ValueListParameterInOut">
+                                    <PropertyValue Property="LocalDataProperty" PropertyPath="ktokd"/>
+                                    <PropertyValue Property="ValueListProperty" String="CustomerGroup"/>
+                                </Record>
+                                <Record Type="Common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="CustomerGroup_Text"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="YC_PC_FE_CUSTOMER_LIST_CDS.YC_PC_FE_CUSTOMER_LIST_CDS_Entities" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Aggregation.ApplySupported">
+                    <Record>
+                        <PropertyValue Property="Transformations">
+                            <Collection>
+                                <String>aggregate</String>
+                                <String>groupby</String>
+                                <String>filter</String>
+                            </Collection>
+                        </PropertyValue>
+                        <PropertyValue Property="Rollup" EnumMember="None"/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <atom:link rel="self" href="http://sesapaptt01.cpall.co.th:8000/sap/opu/odata/sap/YC_PC_FE_CUSTOMER_LIST_CDS/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
+            <atom:link rel="latest-version" href="http://sesapaptt01.cpall.co.th:8000/sap/opu/odata/sap/YC_PC_FE_CUSTOMER_LIST_CDS/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>
